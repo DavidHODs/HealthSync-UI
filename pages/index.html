@@ -1,488 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthSyncIQ - Secure Access</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* CSS Variables for Brand Colors - Consistent with HealthSyncIQ Brand */
-        :root {
-            --hs-color-primary-dark: #1A3E62; /* Deep Blue */
-            --hs-color-primary-medium: #2B5A8F;
-            --hs-color-primary-light: #5A8FC2;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HealthSyncIQ - Secure Access</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../styles/root.css"> 
+        <link rel="stylesheet" href="../styles/index.css"> 
+        <script type="module" src="../scripts/index.js"></script>
+    </head>
+    <body>
+        <header class="header">
+            <a href="#" class="logo">HealthSyncIQ</a>
+        </header>
 
-            --hs-color-accent-green: #3CB371; /* Medium Sea Green */
-            --hs-color-accent-aqua: #20B2AA; /* Light Sea Green */
+        <main class="main-content">
+            <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle class="circle" cx="50" cy="50" r="45"/>
+                <rect class="plus-sign" x="45" y="25" width="10" height="50" rx="2"/>
+                <rect class="plus-sign" x="25" y="45" width="50" height="10" rx="2"/>
+                <path class="heartbeat" d="M20 50 L35 50 L40 60 L45 40 L50 50 L65 50 L70 40 L75 60 L80 50" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
 
-            --hs-color-neutral-white: #FFFFFF;
-            --hs-color-neutral-light-grey: #F8F9FA;
-            --hs-color-neutral-medium-grey: #E9ECEF;
-            --hs-color-neutral-dark-grey: #ADB5BD;
-            --hs-color-neutral-text-dark: #343A40;
-            
-            --hs-font-primary: 'Inter', sans-serif;
-            
-            --hs-spacing-xs: 4px;
-            --hs-spacing-sm: 8px;
-            --hs-spacing-md: 16px;
-            --hs-spacing-lg: 24px;
-            --hs-spacing-xl: 32px;
-            --hs-spacing-xxl: 48px;
-        }
+            <div class="copy-text">
+                <h1>Your Unified Health Intelligence Platform</h1>
+                <p>HealthSyncIQ provides a secure platform to manage sensitive patient records. It transforms extensive medical data into concise, actionable summaries for efficient healthcare delivery and improved decision-making.</p>
+            </div>
 
-        /* Base Styles */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+            <button id="showLoginModal" class="button-login-hero">Login to HealthSyncIQ</button>
+        </main>
 
-        body {
-            font-family: var(--hs-font-primary);
-            line-height: 1.6;
-            color: var(--hs-color-neutral-text-dark);
-            background-color: var(--hs-color-neutral-light-grey);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-y: auto; /* Ensure body can scroll when modal is closed */
-        }
-
-        /* Header - Consistent with existing brand */
-        .header {
-            background-color: var(--hs-color-primary-dark);
-            color: var(--hs-color-neutral-white);
-            padding: var(--hs-spacing-lg) var(--hs-spacing-xl);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .header .logo {
-            font-size: 1.8em;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--hs-color-neutral-white);
-            text-decoration: none;
-        }
-
-        /* Main content area for landing page elements */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column; /* Stack elements vertically */
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: var(--hs-spacing-xxl) var(--hs-spacing-lg); /* Generous padding */
-        }
-
-        /* Brand Logo (SVG) */
-        .brand-logo-svg {
-            width: 150px; /* Adjust size as needed */
-            height: 150px;
-            margin-bottom: var(--hs-spacing-xl);
-        }
-        .brand-logo-svg .plus-sign {
-            fill: var(--hs-color-accent-green); /* Green for the plus */
-            transition: fill 0.3s ease;
-        }
-        .brand-logo-svg .circle {
-            fill: var(--hs-color-primary-medium); /* Blue for the circle */
-            transition: fill 0.3s ease;
-        }
-        .brand-logo-svg .heartbeat {
-            fill: var(--hs-color-accent-aqua); /* Aqua for the heartbeat line */
-            transition: fill 0.3s ease;
-        }
-        .brand-logo-svg:hover .plus-sign {
-            fill: var(--hs-color-primary-light);
-        }
-        .brand-logo-svg:hover .heartbeat {
-            fill: var(--hs-color-accent-green);
-        }
-
-        /* Copy Text */
-        .copy-text {
-            max-width: 600px;
-            margin-bottom: var(--hs-spacing-xxl);
-            font-size: 1.15em;
-            color: var(--hs-color-neutral-text-dark);
-        }
-
-        .copy-text h1 {
-            font-size: 2.8em;
-            margin-bottom: var(--hs-spacing-md);
-            color: var(--hs-color-primary-dark);
-            font-weight: 700;
-        }
-        .copy-text p {
-            font-size: 1.1em;
-            line-height: 1.7;
-            color: var(--hs-color-neutral-text-dark);
-        }
-
-        /* Login Button (Initial) */
-        .button-login-hero {
-            padding: var(--hs-spacing-md) var(--hs-spacing-xl);
-            background-color: var(--hs-color-primary-medium);
-            color: var(--hs-color-neutral-white);
-            border-radius: 8px; /* Slightly more rounded for hero button */
-            font-weight: 600;
-            font-size: 1.3em; /* Larger font size */
-            cursor: pointer;
-            text-decoration: none;
-            border: none;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .button-login-hero:hover {
-            background-color: var(--hs-color-primary-dark);
-            transform: translateY(-2px); /* Slight lift on hover */
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000; /* Ensure it's on top */
-            visibility: hidden; /* Hidden by default */
-            opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .modal-overlay.show {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background-color: var(--hs-color-neutral-white);
-            border-radius: 10px; /* Slightly more rounded */
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* More prominent shadow */
-            padding: var(--hs-spacing-xxl);
-            width: 90%;
-            max-width: 500px; /* Wider modal */
-            position: relative;
-            transform: scale(0.95); /* Start slightly smaller */
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.show .modal-content {
-            transform: scale(1); /* Scale up when shown */
-        }
-
-        .modal-close-button {
-            position: absolute;
-            top: var(--hs-spacing-md);
-            right: var(--hs-spacing-md);
-            background: none;
-            border: none;
-            font-size: 1.8em;
-            color: var(--hs-color-neutral-dark-grey);
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .modal-close-button:hover {
-            color: var(--hs-color-primary-dark);
-        }
-
-        .modal-content h2 {
-            font-size: 1.8em; /* Slightly smaller heading for modal */
-            margin-bottom: var(--hs-spacing-xl);
-            color: var(--hs-color-primary-dark);
-        }
-
-        /* Form Group - Consistent with existing brand */
-        .form-group {
-            margin-bottom: var(--hs-spacing-lg); /* More space between fields in modal */
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: var(--hs-spacing-sm);
-            font-weight: 500;
-            color: var(--hs-color-primary-dark);
-            font-size: 0.95em; /* Slightly smaller label */
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="password"] {
-            width: 100%;
-            padding: var(--hs-spacing-md); /* Larger input fields */
-            border: 1px solid var(--hs-color-neutral-medium-grey);
-            border-radius: 6px; /* Slightly more rounded */
-            font-family: var(--hs-font-primary);
-            font-size: 1.05em; /* Slightly larger text in input */
-            color: var(--hs-color-neutral-text-dark);
-            background-color: var(--hs-color-neutral-white);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-group input:focus {
-            border-color: var(--hs-color-primary-medium);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(43, 90, 143, 0.2);
-        }
-
-        /* Modal Login Button */
-        .button-modal-login {
-            display: block;
-            width: 100%;
-            padding: var(--hs-spacing-md);
-            margin-top: var(--hs-spacing-xl); /* More space above modal button */
-            background-color: var(--hs-color-primary-medium);
-            color: var(--hs-color-neutral-white);
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1.15em;
-            cursor: pointer;
-            text-decoration: none;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .button-modal-login:hover {
-            background-color: var(--hs-color-primary-dark);
-        }
-
-        /* Message Box for Login Status */
-        .login-message {
-            padding: var(--hs-spacing-sm) var(--hs-spacing-md);
-            border-radius: 5px;
-            margin-bottom: var(--hs-spacing-md);
-            font-weight: 500;
-            text-align: center;
-            display: none; /* Hidden by default */
-        }
-
-        .login-message.success {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: var(--hs-color-status-success);
-            border: 1px solid var(--hs-color-status-success);
-        }
-
-        .login-message.error {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: var(--hs-color-alert-error);
-            border: 1px solid var(--hs-color-alert-error);
-        }
-
-        /* Utility class to prevent body scroll when modal is open */
-        body.no-scroll {
-            overflow: hidden;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .copy-text h1 {
-                font-size: 2.2em;
-            }
-            .copy-text p {
-                font-size: 1em;
-            }
-            .button-login-hero {
-                font-size: 1.1em;
-                padding: var(--hs-spacing-md) var(--hs-spacing-lg);
-            }
-            .main-content {
-                padding: var(--hs-spacing-xl) var(--hs-spacing-md);
-            }
-            .login-card, .modal-content {
-                padding: var(--hs-spacing-xl);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .brand-logo-svg {
-                width: 100px;
-                height: 100px;
-            }
-            .copy-text h1 {
-                font-size: 1.8em;
-            }
-            .copy-text p {
-                font-size: 0.9em;
-            }
-            .button-login-hero {
-                font-size: 1em;
-                padding: var(--hs-spacing-sm) var(--hs-spacing-md);
-            }
-            .login-card, .modal-content {
-                padding: var(--hs-spacing-lg);
-            }
-        }
-
-    </style>
-</head>
-<body>
-    <header class="header">
-        <a href="#" class="logo">HealthSyncIQ</a>
-    </header>
-
-    <main class="main-content">
-        <!-- Brand Logo (SVG) -->
-        <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Main Circle (representing health/data unification) -->
-            <circle class="circle" cx="50" cy="50" r="45"/>
-            <!-- Plus sign (representing addition/care) -->
-            <rect class="plus-sign" x="45" y="25" width="10" height="50" rx="2"/>
-            <rect class="plus-sign" x="25" y="45" width="50" height="10" rx="2"/>
-            <!-- Heartbeat line (representing life/vitality/monitoring) -->
-            <path class="heartbeat" d="M20 50 L35 50 L40 60 L45 40 L50 50 L65 50 L70 40 L75 60 L80 50" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-
-        <!-- Copy Text -->
-        <div class="copy-text">
-            <h1>Your Unified Health Intelligence Platform</h1>
-            <p>HealthSyncIQ provides a secure platform to manage sensitive patient records. It transforms extensive medical data into concise, actionable summaries for efficient healthcare delivery and improved decision-making.</p>
-        </div>
-
-        <!-- Initial Login Button -->
-        <button id="showLoginModal" class="button-login-hero">Login to HealthSyncIQ</button>
-    </main>
-
-    <!-- Login Modal -->
-    <div id="loginModalOverlay" class="modal-overlay">
-        <div class="modal-content">
-            <button id="closeLoginModal" class="modal-close-button">&times;</button>
-            <h2>Access Your Account</h2>
-            <!-- Message display area -->
-            <div id="loginMessage" class="login-message"></div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="modal-email">Email Address</label>
-                    <input type="text" id="modal-email" name="email" placeholder="your.email@example.com" required>
+        <div id="loginModalOverlay" class="modal-overlay">
+            <div class="modal-content">
+                <button id="closeLoginModal" class="modal-close-button">&times;</button>
+                <h2>Access Your Account</h2>
+                <div id="customMessageBox" class="custom-message-box">
+                    <p id="messageBoxText"></p>
+                    <button class="close-btn" onclick="document.getElementById('customMessageBox').style.display='none';">Close</button>
                 </div>
-                <div class="form-group">
-                    <label for="modal-password">Password</label>
-                    <input type="password" id="modal-password" name="password" placeholder="********" required>
-                </div>
-                <button type="submit" class="button-modal-login">Login Securely</button>
-            </form>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="modal-email">Email Address</label>
+                        <input type="text" id="modal-email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-password">Password</label>
+                        <input type="password" id="modal-password" name="password" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="button-modal-login">Login Securely</button>
+                </form>
+            </div>
         </div>
-    </div>
-
-    <script>
-        // Define the API base URL and login endpoint directly here.
-        // Change this when deploying to different environments.
-        const API_BASE_URL = 'http://localhost:9000/api/v1'; 
-        const LOGIN_ENDPOINT = '/auth/login';
-
-        // Get references to elements
-        const showLoginModalBtn = document.getElementById('showLoginModal');
-        const loginModalOverlay = document.getElementById('loginModalOverlay');
-        const closeLoginModalBtn = document.getElementById('closeLoginModal');
-        const loginForm = document.getElementById('loginForm');
-        const loginMessageDiv = document.getElementById('loginMessage'); // Reference to the message div
-
-        // Function to show message banner
-        function showMessage(message, type) {
-            loginMessageDiv.textContent = message;
-            loginMessageDiv.className = 'login-message ' + type; // Set class for styling (success/error)
-            loginMessageDiv.style.display = 'block'; // Make it visible
-        }
-
-        // Function to hide message banner
-        function hideMessage() {
-            loginMessageDiv.textContent = '';
-            loginMessageDiv.className = 'login-message'; // Reset classes
-            loginMessageDiv.style.display = 'none'; // Hide it
-        }
-
-        // Function to show the modal
-        function showModal() {
-            hideMessage(); // Clear any previous messages when showing modal
-            loginModalOverlay.classList.add('show');
-            document.body.classList.add('no-scroll'); // Prevent body scrolling
-        }
-
-        // Function to hide the modal
-        function hideModal() {
-            loginModalOverlay.classList.remove('show');
-            document.body.classList.remove('no-scroll'); // Allow body scrolling
-        }
-
-        // Event listeners
-        showLoginModalBtn.addEventListener('click', showModal);
-        closeLoginModalBtn.addEventListener('click', hideModal);
-
-        // Hide modal if clicked outside the content (on the overlay itself)
-        loginModalOverlay.addEventListener('click', (event) => {
-            if (event.target === loginModalOverlay) {
-                hideModal();
-            }
-        });
-
-        // Form submission handler
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-            
-            const email = document.getElementById('modal-email').value;
-            const password = document.getElementById('modal-password').value;
-
-            hideMessage(); // Hide message before a new attempt
-            console.log('Attempting to log in with:', { email, password });
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}${LOGIN_ENDPOINT}`, { // Using updated URL and endpoint
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password }),
-                });
-
-                if (response.status === 200 || response.status === 201) {
-                    const data = await response.json();
-                    console.log('Login successful:', data);
-                    // Save auth_token to sessionStorage
-                    if (data.data && data.data.auth_token) {
-                        sessionStorage.setItem('authToken', data.data.auth_token);
-                        console.log('Auth token saved to session storage.');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1000);
-                        // Simulate redirection after a short delay
-                        setTimeout(() => {
-                            
-                            hideModal(); // Hide modal for this demo
-                        }, 1000); 
-                    } else {
-                        showMessage('Login successful, but no auth token received.', 'error');
-                        console.warn('Login successful but no auth_token in payload.');
-                    }
-                } else {
-                    const errorData = await response.json();
-                    console.error('Login failed:', errorData);
-                    showMessage(errorData.message || 'Authentication failed. Please check your credentials.', 'error'); // Display red banner
-                }
-            } catch (error) {
-                console.error('Network error during login:', error);
-                showMessage('An unexpected error occurred. Please check your network connection.', 'error'); // Display red banner for network errors
-            }
-        });
-
-        // Accessibility: Close modal with Escape key
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && loginModalOverlay.classList.contains('show')) {
-                hideModal();
-            }
-        });
-    </script>
-</body>
+    </body>
 </html>
