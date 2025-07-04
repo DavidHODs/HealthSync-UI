@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSyncIQ - Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/root.css">
+    <link rel="stylesheet" href="../styles/settings.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">HealthSyncIQ</a>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li> 
+                <li><a href="settings.html" class="active">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>System Settings</h1>
+        <p style="text-align: center; margin-bottom: var(--hs-spacing-xxl);">Manage staff, departments, and system configurations.</p>
+        
+        <div class="settings-container">
+            <div class="settings-section">
+                <h2>Staff Management</h2>
+                <button id="showCreateStaffModal" class="button-primary">Create New Staff</button>
+                <button id="showUpdateStaffModal" class="button-primary">Update Staff</button>
+                <button id="showDeleteStaffModal" class="button-primary button-delete">Delete Staff</button>
+            </div>
+
+            <div class="settings-section">
+                <h2>Department Management</h2>
+                <button id="showCreateDepartmentModal" class="button-primary">Create New Department</button>
+                <button id="showUpdateDepartmentModal" class="button-primary">Update Department</button>
+                <button id="showDeleteDepartmentModal" class="button-primary button-delete">Delete Department</button>
+            </div>
+
+            <div class="settings-section">
+                <h2>Security</h2>
+                <button id="showChangePasswordModal" class="button-primary">Change Password</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Staff Modal -->
+    <div id="createStaffModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeCreateStaffModal" class="modal-close-button">&times;</button>
+            <h2>Create New Staff Account</h2>
+            <form id="createStaffForm">
+                <div class="form-columns">
+                    <div class="form-group">
+                        <label for="staff-title">Title</label>
+                        <input type="text" id="staff-title" name="title" placeholder="e.g., Dr., Mr., Ms.">
+                    </div>
+                    <div class="form-group">
+                        <label for="staff-surname">Surname</label>
+                        <input type="text" id="staff-surname" name="surname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staff-first-name">First Name</label>
+                        <input type="text" id="staff-first-name" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staff-last-name">Last Name</label>
+                        <input type="text" id="staff-last-name" name="last_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="staff-email">Email</label>
+                        <input type="email" id="staff-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staff-password">Password</label>
+                        <input type="password" id="staff-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staff-role">Role</label>
+                        <input type="text" id="staff-role" name="role" placeholder="e.g., Doctor, Nurse, Admin">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Departments</label>
+                    <div id="staff-departments-container">
+                        <!-- Dynamic department name fields will be appended here -->
+                    </div>
+                    <button type="button" id="addStaffDepartmentButton" class="add-department-button">Add Department</button>
+                </div>
+
+                <button type="submit" class="button-submit">Create Staff Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Staff Modal -->
+    <div id="updateStaffModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeUpdateStaffModal" class="modal-close-button">&times;</button>
+            <h2>Update Staff Account</h2>
+            <form id="updateStaffForm">
+                <div class="form-group">
+                    <label for="update-staff-email-id">Staff Email (to identify staff)</label>
+                    <input type="email" id="update-staff-email-id" name="staff_email_id" placeholder="Enter staff email to update" required>
+                </div>
+                <div class="form-columns">
+                    <div class="form-group">
+                        <label for="update-staff-title">Title</label>
+                        <input type="text" id="update-staff-title" name="title" placeholder="e.g., Dr., Mr., Ms.">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-staff-surname">Surname</label>
+                        <input type="text" id="update-staff-surname" name="surname">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-staff-first-name">First Name</label>
+                        <input type="text" id="update-staff-first-name" name="first_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-staff-last-name">Last Name</label>
+                        <input type="text" id="update-staff-last-name" name="last_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-staff-role">Role</label>
+                        <input type="text" id="update-staff-role" name="role" placeholder="e.g., Doctor, Nurse, Admin">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Departments</label>
+                    <div id="update-staff-departments-container">
+                        <!-- Dynamic department name fields will be appended here -->
+                    </div>
+                    <button type="button" id="addUpdateStaffDepartmentButton" class="add-department-button">Add Department</button>
+                </div>
+
+                <button type="submit" class="button-submit">Update Staff Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Staff Modal -->
+    <div id="deleteStaffModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeDeleteStaffModal" class="modal-close-button">&times;</button>
+            <h2>Delete Staff Account</h2>
+            <form id="deleteStaffForm">
+                <p style="text-align: center; margin-bottom: var(--hs-spacing-lg);">Are you sure you want to delete this staff account? This action cannot be undone.</p>
+                <div class="form-group">
+                    <label for="delete-staff-email">Staff Email (to confirm deletion)</label>
+                    <input type="email" id="delete-staff-email" name="email" placeholder="Enter staff email to delete" required>
+                </div>
+                <button type="submit" class="button-submit button-delete">Confirm Delete Staff</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Department Modal -->
+    <div id="createDepartmentModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeCreateDepartmentModal" class="modal-close-button">&times;</button>
+            <h2>Create New Department</h2>
+            <form id="createDepartmentForm">
+                <div class="form-group">
+                    <label for="department-name">Department Name</label>
+                    <input type="text" id="department-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="department-description">Description</label>
+                    <textarea id="department-description" name="description" placeholder="Brief description of the department"></textarea>
+                </div>
+                <button type="submit" class="button-submit">Create Department</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Department Modal -->
+    <div id="updateDepartmentModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeUpdateDepartmentModal" class="modal-close-button">&times;</button>
+            <h2>Update Department</h2>
+            <form id="updateDepartmentForm">
+                <div class="form-group">
+                    <label for="update-department-id">Department ID (to identify department)</label>
+                    <input type="text" id="update-department-id" name="department_id" placeholder="Enter department ID to update" required>
+                </div>
+                <div class="form-group">
+                    <label for="update-department-name">Department Name</label>
+                    <input type="text" id="update-department-name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="update-department-description">Description</label>
+                    <textarea id="update-department-description" name="description" placeholder="Brief description of the department"></textarea>
+                </div>
+                <button type="submit" class="button-submit">Update Department</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Department Modal -->
+    <div id="deleteDepartmentModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeDeleteDepartmentModal" class="modal-close-button">&times;</button>
+            <h2>Delete Department</h2>
+            <form id="deleteDepartmentForm">
+                <p style="text-align: center; margin-bottom: var(--hs-spacing-lg);">Are you sure you want to delete this department? This action cannot be undone.</p>
+                <div class="form-group">
+                    <label for="delete-department-id">Department ID (to confirm deletion)</label>
+                    <input type="text" id="delete-department-id" name="department_id" placeholder="Enter department ID to delete" required>
+                </div>
+                <button type="submit" class="button-submit button-delete">Confirm Delete Department</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeChangePasswordModal" class="modal-close-button">&times;</button>
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" name="current_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" name="new_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-new-password">Confirm New Password</label>
+                    <input type="password" id="confirm-new-password" name="confirm_new_password" required>
+                </div>
+                <button type="submit" class="button-submit">Change Password</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="customMessageBox" class="custom-message-box">
+        <p id="messageBoxText"></p>
+        <button class="close-btn" onclick="document.getElementById('customMessageBox').style.display='none';">Close</button>
+    </div>
+
+    <script src="../scripts/settings.js"></script>
+</body>
+</html>

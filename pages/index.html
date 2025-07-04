@@ -1,55 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>HealthSyncIQ - Secure Access</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../styles/root.css"> 
-        <link rel="stylesheet" href="../styles/index.css"> 
-        <script type="module" src="../scripts/index.js"></script>
-    </head>
-    <body>
-        <header class="header">
-            <a href="#" class="logo">HealthSyncIQ</a>
-        </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSyncIQ - Secure Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/root.css"> 
+    <link rel="stylesheet" href="../styles/index.css"> 
+    <script type="module" src="../scripts/index.js"></script>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">HealthSyncIQ</a>
+    </header>
 
-        <main class="main-content">
-            <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle class="circle" cx="50" cy="50" r="45"/>
-                <rect class="plus-sign" x="45" y="25" width="10" height="50" rx="2"/>
-                <rect class="plus-sign" x="25" y="45" width="50" height="10" rx="2"/>
-                <path class="heartbeat" d="M20 50 L35 50 L40 60 L45 40 L50 50 L65 50 L70 40 L75 60 L80 50" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+    <main class="main-content">
+        <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle class="circle" cx="50" cy="50" r="45"/>
+            <rect class="plus-sign" x="45" y="25" width="10" height="50" rx="2"/>
+            <rect class="plus-sign" x="25" y="45" width="50" height="10" rx="2"/>
+            <path class="heartbeat" d="M20 50 L35 50 L40 60 L45 40 L50 50 L65 50 L70 40 L75 60 L80 50" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
 
-            <div class="copy-text">
-                <h1>Your Unified Health Intelligence Platform</h1>
-                <p>HealthSyncIQ provides a secure platform to manage sensitive patient records. It transforms extensive medical data into concise, actionable summaries for efficient healthcare delivery and improved decision-making.</p>
-            </div>
-
-            <button id="showLoginModal" class="button-login-hero">Login to HealthSyncIQ</button>
-        </main>
-
-        <div id="loginModalOverlay" class="modal-overlay">
-            <div class="modal-content">
-                <button id="closeLoginModal" class="modal-close-button">&times;</button>
-                <h2>Access Your Account</h2>
-                <div id="customMessageBox" class="custom-message-box">
-                    <p id="messageBoxText"></p>
-                    <button class="close-btn" onclick="document.getElementById('customMessageBox').style.display='none';">Close</button>
-                </div>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="modal-email">Email Address</label>
-                        <input type="text" id="modal-email" name="email" placeholder="your.email@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal-password">Password</label>
-                        <input type="password" id="modal-password" name="password" placeholder="********" required>
-                    </div>
-                    <button type="submit" class="button-modal-login">Login Securely</button>
-                </form>
-            </div>
+        <div class="copy-text">
+            <h1>Your Unified Health Intelligence Platform</h1>
+            <p>HealthSyncIQ provides a secure platform to manage sensitive patient records. It transforms extensive medical data into concise, actionable summaries for efficient healthcare delivery and improved decision-making.</p>
         </div>
-    </body>
+
+        <button id="showLoginModal" class="button-login-hero">Login to HealthSyncIQ</button>
+    </main>
+
+    <div id="loginModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeLoginModal" class="modal-close-button">&times;</button>
+            <h2>Access Your Account</h2>
+            <div id="customMessageBox" class="custom-message-box">
+                <p id="messageBoxText"></p>
+                <button class="close-btn" onclick="document.getElementById('customMessageBox').style.display='none';">Close</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="modal-email">Email Address</label>
+                    <input type="text" id="modal-email" name="email" placeholder="your.email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-password">Password</label>
+                    <input type="password" id="modal-password" name="password" placeholder="********" required>
+                </div>
+                <button type="submit" class="button-modal-login">Login Securely</button>
+            </form>
+        </div>
+    </div>
+</body>
 </html>
