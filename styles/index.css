@@ -2,7 +2,6 @@
     justify-content: center;
 }
 
-
 .main-content {
     flex-grow: 1;
     display: flex;
@@ -37,7 +36,6 @@
     fill: var(--hs-color-accent-green);
 }
 
-
 .copy-text {
     max-width: 600px;
     margin-bottom: var(--hs-spacing-xxl);
@@ -56,7 +54,6 @@
     line-height: 1.7;
     color: var(--hs-color-neutral-text-dark);
 }
-
 
 .button-login-hero {
     padding: var(--hs-spacing-md) var(--hs-spacing-xl);
@@ -96,17 +93,6 @@
 .button-modal-login:hover {
     background-color: var(--hs-color-primary-dark);
 }
-
-
-#loginMessage {
-    padding: var(--hs-spacing-sm) var(--hs-spacing-md);
-    border-radius: 5px;
-    margin-bottom: var(--hs-spacing-md);
-    font-weight: 500;
-    text-align: center;
-    display: none; 
-}
-
 
 @media (max-width: 768px) {
     .copy-text h1 {

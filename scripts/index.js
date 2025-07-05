@@ -1,88 +1,148 @@
 import { AppConfig } from "./config.js";
 
-const LOGIN_ENDPOINT = "auth/login"
+const API_BASE_URL = AppConfig.API_BASE_URL;
+
+const GET_ACCESS_TOKEN_ENDPOINT = "auth/get-access-token";
+const LOGIN_ENDPOINT = "auth/login";
 
 const showLoginModalBtn = document.getElementById("showLoginModal");
 const loginModalOverlay = document.getElementById("loginModalOverlay");
 const closeLoginModalBtn = document.getElementById("closeLoginModal");
 const loginForm = document.getElementById("loginForm");
 
+const accessCodeModalOverlay = document.getElementById("accessCodeModalOverlay");
+const closeAccessCodeModalBtn = document.getElementById("closeAccessCodeModal");
+const accessCodeForm = document.getElementById("accessCodeForm");
+const hiddenTokenInput = document.getElementById("hidden-token");
+const accessCodeMessageBox = document.getElementById("accessCodeMessageBox");
+const accessCodeMessageBoxText = document.getElementById("accessCodeMessageBoxText");
+
 const customMessageBox = document.getElementById("customMessageBox"); 
 const messageBoxText = document.getElementById("messageBoxText"); 
 
-function showMessage(message, type) {
-    messageBoxText.textContent = message;
-    customMessageBox.className = "custom-message-box " + type; 
-    customMessageBox.style.display = "flex"; 
+function showMessage(message, type, targetMessageBox = customMessageBox, targetMessageBoxText = messageBoxText) {
+    targetMessageBoxText.textContent = message;
+    targetMessageBox.className = "custom-message-box " + type;
+    targetMessageBox.style.display = "flex";
 }
 
-function hideMessage() {
-    messageBoxText.textContent = "";
-    customMessageBox.className = "custom-message-box"; 
-    customMessageBox.style.display = "none"; 
+function hideMessage(targetMessageBox = customMessageBox, targetMessageBoxText = messageBoxText) {
+    targetMessageBoxText.textContent = "";
+    targetMessageBox.className = "custom-message-box";
+    targetMessageBox.style.display = "none";
 }
 
-function showModal() {
-    hideMessage(); 
-    loginModalOverlay.classList.add("show");
-    document.body.classList.add("no-scroll"); 
+function showModal(modalOverlay) {
+    hideMessage();
+    hideMessage(accessCodeMessageBox, accessCodeMessageBoxText);
+    modalOverlay.classList.add("show");
+    document.body.classList.add("no-scroll");
 }
 
-function hideModal() {
-    loginModalOverlay.classList.remove("show");
-    document.body.classList.remove("no-scroll"); 
+function hideModal(modalOverlay) {
+    modalOverlay.classList.remove("show");
+    document.body.classList.remove("no-scroll");
+    hideMessage();
+    hideMessage(accessCodeMessageBox, accessCodeMessageBoxText);
 }
 
-
-showLoginModalBtn.addEventListener("click", showModal);
-closeLoginModalBtn.addEventListener("click", hideModal);
-
+showLoginModalBtn.addEventListener("click", () => showModal(loginModalOverlay));
+closeLoginModalBtn.addEventListener("click", () => hideModal(loginModalOverlay));
 loginModalOverlay.addEventListener("click", (event) => {
     if (event.target === loginModalOverlay) {
-        hideModal();
+        hideModal(loginModalOverlay);
+    }
+});
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && loginModalOverlay.classList.contains("show")) {
+        hideModal(loginModalOverlay);
+    }
+});
+
+closeAccessCodeModalBtn.addEventListener("click", () => hideModal(accessCodeModalOverlay));
+accessCodeModalOverlay.addEventListener("click", (event) => {
+    if (event.target === accessCodeModalOverlay) {
+        hideModal(accessCodeModalOverlay);
+    }
+});
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && accessCodeModalOverlay.classList.contains("show")) {
+        hideModal(accessCodeModalOverlay);
     }
 });
 
 loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault(); 
-  
-  const email = document.getElementById("modal-email").value;
-  const password = document.getElementById("modal-password").value;
+    event.preventDefault();
+    hideMessage();
+    
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
 
-  hideMessage(); 
-  
-  try {
-      const response = await fetch(`${AppConfig.API_BASE_URL}${LOGIN_ENDPOINT}`, { 
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-          const data = await response.json();
-
-          if (data.data && data.data.auth_token) {
-              sessionStorage.setItem("authToken", data.data.auth_token);
-              showMessage("Login successful!");
-
-              setTimeout(() => {
-                  window.location.href = "../pages/dashboard.html";
-              }, 1000);
-          }
-      } else {
-          const errorData = await response.json();
-
-          showMessage(errorData.message || "Authentication failed. Please check your credentials.", "error"); 
-      }
-  } catch (error) {
-      showMessage("An unexpected error occurred. Please check your network connection.", "error"); 
-  }
+    try {
+        const response = await fetch(`${API_BASE_URL}/${GET_ACCESS_TOKEN_ENDPOINT}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.token) {
+                hiddenTokenInput.value = data.data.token;
+                hideModal(loginModalOverlay);
+                showModal(accessCodeModalOverlay);
+                showMessage("Check your email for your access code.", "info", accessCodeMessageBox, accessCodeMessageBoxText);
+            } else {
+                showMessage("Failed to get access token: No token received.", "error");
+            }
+        } else {
+            const errorData = await response.json();
+            showMessage(errorData.error.detail || "Failed to get access code. Please check your credentials.", "error");
+        }
+    } catch (error) {
+        showMessage("Network error during access token request. Please check your network connection.", "error");
+    }
 });
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && loginModalOverlay.classList.contains("show")) {
-    hideModal();
-  }
+accessCodeForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    hideMessage(accessCodeMessageBox, accessCodeMessageBoxText);
+
+    const token = hiddenTokenInput.value;
+    const code = document.getElementById("access-code").value;
+
+    if (!token || !code) {
+        showMessage("Missing token or access code. Please try logging in again.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/${LOGIN_ENDPOINT}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token, code }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.auth_token) {
+                sessionStorage.setItem("authToken", data.data.auth_token);
+                showMessage("Login successful", "success", accessCodeMessageBox, accessCodeMessageBoxText);
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+            } else {
+                showMessage("Login successful, but no auth token received.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
+            }
+        } else {
+            const errorData = await response.json();
+            showMessage(errorData.error.detail || "Authentication failed. Please check your access code.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
+        }
+    } catch (error) {
+        showMessage("Network error during login. Please check your network connection.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
+    }
 });

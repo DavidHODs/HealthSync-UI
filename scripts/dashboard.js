@@ -110,7 +110,7 @@ searchButton.addEventListener("click", async () => {
     }
 
     try {
-        const fullSearchUrl = `${API_BASE_URL}${PATIENT_ENDPOINT}/${regCode}/search-by-registration-code`;
+        const fullSearchUrl = `${API_BASE_URL}/${PATIENT_ENDPOINT}/${regCode}/search-by-registration-code`;
 
         const response = await fetch(fullSearchUrl, {
             method: "GET",
@@ -257,7 +257,7 @@ newPatientForm.addEventListener("submit", async (event) => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}${PATIENT_ENDPOINT}`, {
+        const response = await fetch(`${API_BASE_URL}/${PATIENT_ENDPOINT}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
