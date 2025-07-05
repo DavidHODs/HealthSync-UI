@@ -94,6 +94,22 @@
     background-color: var(--hs-color-primary-dark);
 }
 
+.loading-spinner {
+    border: 4px solid var(--hs-color-neutral-medium-grey);
+    border-top: 4px solid var(--hs-color-primary-medium);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    display: none; 
+    margin: var(--hs-spacing-md) auto; 
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @media (max-width: 768px) {
     .copy-text h1 {
         font-size: 2.2em;

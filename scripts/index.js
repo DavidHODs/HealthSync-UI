@@ -1,7 +1,6 @@
 import { AppConfig } from "./config.js";
 
-const API_BASE_URL = AppConfig.API_BASE_URL;
-
+const API_BASE_URL = AppConfig.API_BASE_URL; 
 const GET_ACCESS_TOKEN_ENDPOINT = "auth/get-access-token";
 const LOGIN_ENDPOINT = "auth/login";
 
@@ -9,6 +8,7 @@ const showLoginModalBtn = document.getElementById("showLoginModal");
 const loginModalOverlay = document.getElementById("loginModalOverlay");
 const closeLoginModalBtn = document.getElementById("closeLoginModal");
 const loginForm = document.getElementById("loginForm");
+const loginSpinner = document.getElementById("loginSpinner");
 
 const accessCodeModalOverlay = document.getElementById("accessCodeModalOverlay");
 const closeAccessCodeModalBtn = document.getElementById("closeAccessCodeModal");
@@ -16,6 +16,7 @@ const accessCodeForm = document.getElementById("accessCodeForm");
 const hiddenTokenInput = document.getElementById("hidden-token");
 const accessCodeMessageBox = document.getElementById("accessCodeMessageBox");
 const accessCodeMessageBoxText = document.getElementById("accessCodeMessageBoxText");
+const accessCodeSpinner = document.getElementById("accessCodeSpinner");
 
 const customMessageBox = document.getElementById("customMessageBox"); 
 const messageBoxText = document.getElementById("messageBoxText"); 
@@ -32,6 +33,14 @@ function hideMessage(targetMessageBox = customMessageBox, targetMessageBoxText =
     targetMessageBox.style.display = "none";
 }
 
+function showSpinner(spinnerElement) {
+    spinnerElement.style.display = "block";
+}
+
+function hideSpinner(spinnerElement) {
+    spinnerElement.style.display = "none";
+}
+
 function showModal(modalOverlay) {
     hideMessage();
     hideMessage(accessCodeMessageBox, accessCodeMessageBoxText);
@@ -44,6 +53,8 @@ function hideModal(modalOverlay) {
     document.body.classList.remove("no-scroll");
     hideMessage();
     hideMessage(accessCodeMessageBox, accessCodeMessageBoxText);
+    hideSpinner(loginSpinner);
+    hideSpinner(accessCodeSpinner);
 }
 
 showLoginModalBtn.addEventListener("click", () => showModal(loginModalOverlay));
@@ -74,7 +85,11 @@ document.addEventListener("keydown", (event) => {
 loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     hideMessage();
-    
+    showSpinner(loginSpinner);
+
+    const getAccessCodeBtn = document.getElementById("getAccessCodeBtn");
+    getAccessCodeBtn.disabled = true;
+
     const email = document.getElementById("modal-email").value;
     const password = document.getElementById("modal-password").value;
 
@@ -86,7 +101,10 @@ loginForm.addEventListener("submit", async (event) => {
             },
             body: JSON.stringify({ email, password }),
         });
-        
+
+        hideSpinner(loginSpinner);
+        getAccessCodeBtn.disabled = false;
+
         if (response.ok) {
             const data = await response.json();
             if (data.data && data.data.token) {
@@ -102,6 +120,8 @@ loginForm.addEventListener("submit", async (event) => {
             showMessage(errorData.error.detail || "Failed to get access code. Please check your credentials.", "error");
         }
     } catch (error) {
+        hideSpinner(loginSpinner);
+        getAccessCodeBtn.disabled = false;
         showMessage("Network error during access token request. Please check your network connection.", "error");
     }
 });
@@ -109,11 +129,13 @@ loginForm.addEventListener("submit", async (event) => {
 accessCodeForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     hideMessage(accessCodeMessageBox, accessCodeMessageBoxText);
+    showSpinner(accessCodeSpinner);
 
     const token = hiddenTokenInput.value;
     const code = document.getElementById("access-code").value;
 
     if (!token || !code) {
+        hideSpinner(accessCodeSpinner);
         showMessage("Missing token or access code. Please try logging in again.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
         return;
     }
@@ -127,11 +149,14 @@ accessCodeForm.addEventListener("submit", async (event) => {
             body: JSON.stringify({ token, code }),
         });
 
+        hideSpinner(accessCodeSpinner);
+
         if (response.ok) {
-            const data = await response.json();
-            if (data.data && data.data.auth_token) {
-                sessionStorage.setItem("authToken", data.data.auth_token);
-                showMessage("Login successful", "success", accessCodeMessageBox, accessCodeMessageBoxText);
+            const payload = await response.json();
+            if (payload.data && payload.data.auth_token && payload.data.staff.role) {
+                sessionStorage.setItem("authToken", payload.data.auth_token);
+                sessionStorage.setItem("authRole", payload.data.staff.role)
+                showMessage("Login successful! Redirecting...", "success", accessCodeMessageBox, accessCodeMessageBoxText);
                 setTimeout(() => {
                     window.location.href = "dashboard.html";
                 }, 1000);
@@ -143,6 +168,7 @@ accessCodeForm.addEventListener("submit", async (event) => {
             showMessage(errorData.error.detail || "Authentication failed. Please check your access code.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
         }
     } catch (error) {
-        showMessage("Network error during login. Please check your network connection.", "error", accessCodeMessageBox, accessCodeMessageBoxText);
+        hideSpinner(accessCodeSpinner);
+        showMessage("Something went wrong. Please try again", "error", accessCodeMessageBox, accessCodeMessageBoxText);
     }
 });
