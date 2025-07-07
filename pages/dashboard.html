@@ -14,10 +14,7 @@
         <a href="index.html" class="logo">HealthSyncIQ</a>
         <nav>
             <ul>
-                <!-- Dashboard link, now explicitly pointing to dashboard.html and active -->
                 <li><a href="dashboard.html" class="active">Dashboard</a></li> 
-                <!-- Patient Records link removed as requested -->
-                <!-- Settings link, pointing to settings.html -->
                 <li><a href="settings.html">Settings</a></li>
             </ul>
         </nav>
@@ -33,7 +30,6 @@
                 <input type="text" id="registration-code" placeholder="e.g., HS-GUZJ0G" required>
             </div>
             <button id="searchButton" class="button-primary">Search Patient</button>
-            <!-- Changed to button-outline for less prominence -->
             <button id="addNewPatientButton" class="button-outline">Add New Patient</button> 
         </div>
 
@@ -43,7 +39,6 @@
         </div>
     </main>
 
-    <!-- New Patient Modal -->
     <div id="newPatientModalOverlay" class="modal-overlay">
         <div class="modal-content">
             <button id="closeNewPatientModal" class="modal-close-button">&times;</button>
@@ -109,21 +104,19 @@
                         <label for="new-patient-phone">Phone Number</label>
                         <input type="tel" id="new-patient-phone" name="phone_number" placeholder="e.g., +2348012345678">
                     </div>
-                    <div class="form-group" style="grid-column: 1 / span 2;"> <!-- Make this span both columns -->
+                    <div class="form-group" style="grid-column: 1 / span 2;"> 
                         <label for="new-patient-contact-info">Contact Information</label>
                         <textarea id="new-patient-contact-info" name="contact_information" placeholder="Patient's address or general contact details"></textarea>
                     </div>
-                    <div class="form-group" style="grid-column: 1 / span 2;"> <!-- Make this span both columns -->
+                    <div class="form-group" style="grid-column: 1 / span 2;"> 
                         <label for="new-patient-emergency-contact">Emergency Contact</label>
                         <textarea id="new-patient-emergency-contact" name="emergency_contact" placeholder="Name, relationship, phone number"></textarea>
                     </div>
                 </div>
                 
-                <!-- New Meta / Additional Information Section (outside two columns for full width) -->
                 <div class="form-group">
                     <label>Additional Information (Meta Data)</label>
                     <div id="meta-fields-container">
-                        <!-- Dynamic meta fields will be appended here -->
                     </div>
                     <button type="button" id="addMetaFieldButton" class="add-meta-field-button">Add Additional Field</button>
                 </div>
@@ -133,10 +126,10 @@
         </div>
     </div>
 
-    <!-- Custom Message Box HTML -->
     <div id="customMessageBox" class="custom-message-box">
         <p id="messageBoxText"></p>
         <button class="close-btn" onclick="document.getElementById('customMessageBox').style.display='none';">Close</button>
     </div>
+
 </body>
 </html>

@@ -1,7 +1,10 @@
-import { AppConfig } from "./config.js";
+import { AppConfig, StaffRole } from "./config.js";
 
 const API_BASE_URL = AppConfig.API_BASE_URL;
 const PATIENT_ENDPOINT = "patients"; 
+
+const ADD_NEW_PATIENT_ROLES = [StaffRole.ADMIN, StaffRole.DOCTOR];
+const VIEW_PATIENT_RECORD_ROLES = [StaffRole.ADMIN, StaffRole.DOCTOR, StaffRole.NURSING, StaffRole.PHARMACIST, StaffRole.TECHNOLOGIST];
 
 const searchButton = document.getElementById("searchButton");
 const addNewPatientButton = document.getElementById("addNewPatientButton");
@@ -22,10 +25,6 @@ function showCustomMessage(message, type) {
     messageBoxText.textContent = message;
     customMessageBox.className = "custom-message-box " + type; 
     customMessageBox.style.display = "flex"; 
-    
-    if (type === "success") {
-        setTimeout(hideCustomMessage, 3000); 
-    }
 }
 
 function hideCustomMessage() {
@@ -50,7 +49,7 @@ function addMetaField(key = "", value = "") {
     fieldGroup.innerHTML = `
         <div class="form-group">
             <label>Key</label>
-            <input type="text" class="meta-key-input" value="${key}" placeholder="e.g., allergies" required>
+            <input type="text" class="meta-key-input" value="${key}" placeholder="e.g., allergies">
         </div>
         <div class="form-group">
             <label>Value</label>
@@ -66,6 +65,13 @@ function addMetaField(key = "", value = "") {
 }
 
 function showNewPatientModal() {
+    const userRole = sessionStorage.getItem("authRole");
+    
+    if (!userRole || !ADD_NEW_PATIENT_ROLES.includes(userRole)) {
+        showCustomMessage("Unauthorized: You do not have permission to add new patients.", "error");
+        return;
+    }
+    
     hideCustomMessage(); 
     newPatientModalOverlay.classList.add("show");
     document.body.classList.add("no-scroll"); 
@@ -86,6 +92,23 @@ function hideNewPatientModal() {
     hideCustomMessage(); 
 }
 
+
+function checkUserPermissions() {
+    const userRole = sessionStorage.getItem("authRole");
+
+    if (!userRole || !ADD_NEW_PATIENT_ROLES.includes(userRole)) {
+        addNewPatientButton.disabled = true;
+        addNewPatientButton.style.opacity = "0.5"; 
+        addNewPatientButton.style.cursor = "not-allowed";
+    } else {
+        addNewPatientButton.disabled = false;
+        addNewPatientButton.style.opacity = "1";
+        addNewPatientButton.style.cursor = "pointer";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", checkUserPermissions);
+
 searchButton.addEventListener("click", async () => {
     const regCode = registrationCodeInput.value.trim();
     hideCustomMessage();
@@ -102,10 +125,18 @@ searchButton.addEventListener("click", async () => {
     showLoading(true);
 
     const authToken = sessionStorage.getItem("authToken");
+    const userRole = sessionStorage.getItem("authRole");
+
     if (!authToken) {
         showLoading(false);
         showCustomMessage("Error: Not authenticated. Redirecting to login.", "error");
         window.location.href = "index.html"; 
+        return;
+    }
+
+    if (!userRole || !VIEW_PATIENT_RECORD_ROLES.includes(userRole)) {
+        showLoading(false);
+        showCustomMessage("Unauthorized: You do not have permission to view patient records.", "error");
         return;
     }
 
@@ -123,17 +154,17 @@ searchButton.addEventListener("click", async () => {
         showLoading(false);
 
         if (response.ok) { 
-            const data = await response.json();
+            const payload = await response.json();
 
-            if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-              const isSingle = data.data.length === 1;
+            if (payload.data && Array.isArray(payload.data) && payload.data.length > 0) {
+              const isSingle = payload.data.length === 1;
               let patientsHtml = `<h3>${isSingle ? "Patient" : "Patients"} Found:</h3>`;
-              data.data.forEach(patient => {
+              payload.data.forEach(patient => {
                 patientsHtml += `
                   <div style="text-align: left; padding: var(--hs-spacing-md); border-bottom: 1px solid var(--hs-color-neutral-medium-grey); margin-bottom: var(--hs-spacing-md);">
                     <p><strong>Registration Code:</strong> ${patient.registration_code}</p>
                     <p><strong>Name:</strong> ${patient.first_name || ""} ${patient.last_name || ""} ${patient.surname || ""}</p>
-                    <button class="button-primary" style="margin-top: var(--hs-spacing-md);">View Full Record</button>
+                    <a href="patient.html?id=${patient.id}" class="button-primary" style="margin-top: var(--hs-spacing-md); text-decoration: none;">View Full Record</a>
                   </div>
                 `;
               });
@@ -141,7 +172,7 @@ searchButton.addEventListener("click", async () => {
               searchResultsDiv.style.color = "var(--hs-color-neutral-text-dark)";
               searchResultsDiv.style.fontStyle = "normal";
               searchResultsDiv.style.textAlign = "left";
-              showCustomMessage(`${data.data.length > 1 ? "Patients" : "Patient"} found successfully!`, "success");
+              showCustomMessage(`${payload.data.length > 1 ? "Patients" : "Patient"} found successfully!`, "success");
 
             } else {
                 searchResultsDiv.innerHTML = `<p style="color: var(--hs-color-status-info);">No patient found with registration code: <strong>${regCode}</strong>.</p>`;
@@ -152,14 +183,12 @@ searchButton.addEventListener("click", async () => {
             }
 
         } else if (response.status === 401) {
-            const errorData = await response.json();
             searchResultsDiv.innerHTML = `<p style="color: var(--hs-color-alert-error);">Authentication Required: Please log in again.</p>`;
             searchResultsDiv.style.textAlign = "center";
             showCustomMessage("Authentication Required: Please log in again. Redirecting to login.", "error"); 
             window.location.href = "index.html"; 
 
         } else if (response.status === 403) { 
-            const errorData = await response.json();
             searchResultsDiv.innerHTML = `<p style="color: var(--hs-color-alert-error);">Insufficient Permissions: You do not have access to view this patient.</p>`;
             searchResultsDiv.style.textAlign = "center";
             showCustomMessage("Error: Insufficient Permissions to view patient records.", "error");
@@ -173,7 +202,7 @@ searchButton.addEventListener("click", async () => {
 
         } else {
             const errorData = await response.json();
-            const errorMessage = errorData.message || "An unexpected error occurred.";
+            const errorMessage = errorData.error.detail || "An unexpected error occurred.";
             searchResultsDiv.innerHTML = `<p style="color: var(--hs-color-alert-error);">Error searching: ${errorMessage}</p>`;
             searchResultsDiv.style.textAlign = "center";
             showCustomMessage(`Error searching: ${errorMessage}.`, "error");
@@ -247,7 +276,7 @@ newPatientForm.addEventListener("submit", async (event) => {
         return; 
     }
     
-    patientData.meta = metaDataArray.length > 0 ? metaDataArray : null; 
+    patientData.meta = metaDataArray.length > 0 ? metaDataArray : []; 
     
     const authToken = sessionStorage.getItem("authToken");
     if (!authToken) {
@@ -266,26 +295,25 @@ newPatientForm.addEventListener("submit", async (event) => {
             body: JSON.stringify(patientData),
         });
 
-        if (response.status === 201) { 
+        if (response.ok) { 
             const result = await response.json();
-            showCustomMessage(`Patient registered successfully! ID: ${result.data.id}. Message: ${result.data.message}`, "success");
-            hideNewPatientModal();
+            showCustomMessage(`Patient registered successfully! Registraton Code: ${result.data.message}`);
 
         } else if (response.status === 401) {
-            const error = await response.json();
+            const errorData = await response.json();
             showCustomMessage("Authentication Required: Please log in again. Redirecting to login.", "error");
             window.location.href = "index.html"; 
 
         } else if (response.status === 403) { 
-            const error = await response.json();
+            const errorData = await response.json();
             showCustomMessage("Error: Insufficient Permissions to register new patient.", "error");
 
         } else {
-            const error = await response.json();
-            showCustomMessage("Failed to register patient: " + (error.message || "Unknown error"), "error");
+            const errorData = await response.json();
+            showCustomMessage("Failed to register patient: " + (errorData.error.detail || "Unknown error"), "error");
         }
     } catch (error) {
-        showCustomMessage("An error occurred during registration. Please check your network.", "error");
+        showCustomMessage("An error occurred during registration");
     }
 });
 
