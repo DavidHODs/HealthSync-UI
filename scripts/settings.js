@@ -530,14 +530,15 @@ changePasswordForm.addEventListener('submit', async (event) => {
 
     const currentPassword = document.getElementById('current-password').value;
     const newPassword = document.getElementById('new-password').value;
-    const confirmNewPassword = document.getElementById('confirm-new-password').value;
+    const confirmPassword = document.getElementById('confirm-new-password').value;
+    // const email = document.getElementById('email').value;
 
-    if (!currentPassword || !newPassword || !confirmNewPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
         showCustomMessage('All password fields are required.', 'error');
         return;
     }
 
-    if (newPassword !== confirmNewPassword) {
+    if (newPassword !== confirmPassword) {
         showCustomMessage('New password and confirmation do not match.', 'error');
         return;
     }
@@ -550,13 +551,13 @@ changePasswordForm.addEventListener('submit', async (event) => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/users/change-password`, { // Assuming an endpoint that uses the token for identification
-            method: 'PATCH',
+        const response = await fetch(`${API_BASE_URL}/auth/change-password`, { // Assuming an endpoint that uses the token for identification
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`
             },
-            body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+            body: JSON.stringify({ email: "davidoluwatobi41@gmail.com", old_password: currentPassword, new_password: newPassword, confirm_password: confirmPassword }),
         });
 
         if (response.status === 200) {
@@ -570,9 +571,9 @@ changePasswordForm.addEventListener('submit', async (event) => {
             showCustomMessage('Error: Insufficient Permissions or invalid current password.', 'error');
         } else {
             const error = await response.json();
-            showCustomMessage('Failed to change password: ' + (error.message || 'Unknown error'), 'error');
+            showCustomMessage('Failed to change password: ' + (error.error.detail || 'Unknown error'), 'error');
         }
     } catch (error) {
-        showCustomMessage('Network error during password change. Please check your network.', 'error');
+        showCustomMessage('Wrror during password change: , '+(error.error.detail));
     }
 });

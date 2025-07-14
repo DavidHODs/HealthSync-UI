@@ -1,0 +1,180 @@
+.health-history-container {
+    background-color: var(--hs-color-neutral-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: var(--hs-spacing-xl);
+    margin-bottom: var(--hs-spacing-xxl);
+    border: 1px solid var(--hs-color-neutral-medium-grey);
+}
+
+.health-history-container h2 {
+    color: var(--hs-color-primary-dark);
+    margin-bottom: var(--hs-spacing-lg);
+    text-align: center;
+    font-size: 2em;
+}
+
+.patient-info-section,
+.encounter-section {
+    margin-bottom: var(--hs-spacing-xxl);
+    padding-bottom: var(--hs-spacing-xl);
+    border-bottom: 1px solid var(--hs-color-neutral-medium-grey);
+}
+
+.patient-info-section:last-of-type,
+.encounter-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.patient-info-section h3,
+.encounter-section h3 {
+    color: var(--hs-color-primary-medium);
+    margin-bottom: var(--hs-spacing-lg);
+    font-size: 1.6em;
+    text-align: center;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--hs-spacing-md) var(--hs-spacing-lg);
+}
+
+.info-item {
+    padding: var(--hs-spacing-sm) 0;
+    border-bottom: 1px dashed var(--hs-color-neutral-medium-grey);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item strong {
+    color: var(--hs-color-primary-dark);
+    display: block;
+    margin-bottom: var(--hs-spacing-xs);
+    font-size: 0.9em;
+}
+
+.info-item span {
+    color: var(--hs-color-neutral-text-dark);
+    font-size: 1em;
+}
+
+/* Enhanced Meta Data List Styling */
+.meta-data-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--hs-spacing-lg) 0; /* Add margin for separation */
+    display: grid; /* Use grid for better control */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+    gap: var(--hs-spacing-md); /* Gap between meta items */
+}
+
+.meta-data-list li {
+    background-color: var(--hs-color-neutral-light-grey);
+    border: 1px solid var(--hs-color-neutral-medium-grey);
+    border-radius: 8px; /* Slightly more rounded corners */
+    padding: var(--hs-spacing-md);
+    font-size: 0.95em; /* Slightly larger font */
+    color: var(--hs-color-neutral-text-dark);
+    display: flex; /* Use flex for internal layout */
+    flex-direction: column; /* Stack key and value */
+    align-items: flex-start; /* Align text to the start */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow */
+}
+
+.meta-data-list li strong {
+    color: var(--hs-color-primary-medium); /* Use medium blue for keys */
+    margin-bottom: var(--hs-spacing-xs); /* Space between key and value */
+    font-size: 1em; /* Keep key font size consistent */
+    text-transform: capitalize; /* Capitalize the first letter of the key */
+}
+
+.meta-data-list li span {
+    word-break: break-word; /* Allow long words to break */
+    font-size: 0.95em; /* Slightly smaller for value */
+    color: var(--hs-color-neutral-text-dark);
+}
+
+
+.encounter-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--hs-spacing-xl);
+}
+
+.encounter-card {
+    background-color: var(--hs-color-neutral-light-grey);
+    border: 1px solid var(--hs-color-neutral-medium-grey);
+    border-radius: 8px;
+    padding: var(--hs-spacing-lg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease;
+}
+
+.encounter-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.encounter-card h4 {
+    color: var(--hs-color-primary-dark);
+    margin-bottom: var(--hs-spacing-sm);
+    font-size: 1.2em;
+}
+
+.encounter-card p {
+    font-size: 0.95em;
+    color: var(--hs-color-neutral-text-dark);
+    margin-bottom: var(--hs-spacing-xs);
+}
+
+.encounter-card p strong {
+    color: var(--hs-color-primary-medium);
+}
+
+.encounter-card .labs-list {
+    list-style: none;
+    padding-left: var(--hs-spacing-lg);
+    margin-top: var(--hs-spacing-sm);
+    border-top: 1px dashed var(--hs-color-neutral-medium-grey);
+    padding-top: var(--hs-spacing-sm);
+}
+
+.encounter-card .labs-list li {
+    font-size: 0.9em;
+    color: var(--hs-color-neutral-text-dark);
+    margin-bottom: var(--hs-spacing-xs);
+}
+
+.no-data-message {
+    text-align: center;
+    color: var(--hs-color-neutral-dark-grey);
+    font-style: italic;
+    padding: var(--hs-spacing-xl);
+}
+
+@media (max-width: 768px) {
+    .health-history-container {
+        padding: var(--hs-spacing-lg);
+    }
+    .health-history-container h2 {
+        font-size: 1.6em;
+    }
+    .patient-info-section h3,
+    .encounter-section h3 {
+        font-size: 1.4em;
+    }
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    .meta-data-list {
+        grid-template-columns: 1fr; /* Stack meta items on small screens */
+    }
+    .encounter-cards-container {
+        grid-template-columns: 1fr; /* Stack cards on very small screens */
+    }
+}

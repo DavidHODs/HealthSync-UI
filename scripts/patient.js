@@ -141,6 +141,8 @@ async function handleUpdatePatient(event) {
     updatedPatientData.meta = metaDataArray.length > 0 ? metaDataArray : []; // Send empty array if no meta data
 
     const authToken = sessionStorage.getItem("authToken");
+    console.log("here")
+    console.log(authToken)
     if (!authToken) {
         showLoading(false);
         showCustomMessage("Authentication Required: Please log in again. Redirecting to login.", "error");

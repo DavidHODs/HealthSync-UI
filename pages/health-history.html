@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSyncIQ - Health History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/root.css"> 
+    <link rel="stylesheet" href="../styles/health-history.css"> 
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">HealthSyncIQ</a>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li> 
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>Patient Health History</h1>
+        <p style="text-align: center; margin-bottom: var(--hs-spacing-xxl);">A chronological overview of the patient's medical journey.</p>
+        
+        <div id="healthHistoryContainer" class="health-history-container">
+            <!-- Content will be dynamically loaded here by JavaScript -->
+            <div class="loading-indicator" id="healthHistoryLoadingIndicator"></div>
+            <div id="healthHistoryContent" style="display: none;"></div>
+            <div id="healthHistoryMessage" class="no-data-message">Loading health history...</div>
+        </div>
+    </main>
+
+    <!-- Custom Message Box HTML (re-used from root.css) -->
+    <div id="customMessageBox" class="custom-message-box">
+        <p id="messageBoxText"></p>
+        <button class="close-btn" onclick="document.getElementById('customMessageBox').style.display='none';">Close</button>
+    </div>
+
+    <script type="module" src="../scripts/health-history.js"></script>
+</body>
+</html>
